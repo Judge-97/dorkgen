@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dork gen</title>
+  <style>
+    :root{
+      --bg: #071024;
+      --card: rgba(12,28,45,0.9);
+      --muted: #98a3ad;
+      --accent: #00d4aa;
+      --accent-2: #14b8b6;
+      --glass: rgba(255,255,255,0.03);
+      --danger: #ff6b6b;
+      --radius: 10px;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background-image: linear-gradient(180deg, var(--accent-2), #0fa39a);
+    }
+
+
+    *{box-sizing: border-box}
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(0,212,170,0.06), transparent),
+                  radial-gradient(900px 400px at 90% 90%, rgba(20,184,166,0.04), transparent),
+                  var(--bg);
+      color: #e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display: grid;
+      place-items: center;
+      padding: 28px 12px;
+    }
+
+    /* main card */
+    .container{
+      width: min(920px, 96%);
+      display: grid;
+      gap: 16px;
+      align-items:start;
+    }
+
+    #app-title{
+      margin:0;
+      padding:18px 20px;
+      border-radius: var(--radius);
+      background: linear-gradient(90deg, rgba(0,212,170,0.12), rgba(20,184,166,0.06));
+      color: var(--accent);
+      font-weight:700;
+      font-size:25px;
+      text-align: center;
+      letter-spacing:0.6px;
+      box-shadow: 0 6px 20px rgba(2,6,23,0.6), inset 0 -1px 0 rgba(255,255,255,0.02);
+      border: 1px solid rgba(15,50,60,0.35);
+    }
+
+    /* result area */
+    #show-result{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 12px;
+      padding:14px;
+      display: grid;
+      gap:10px;
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 10px 30px rgba(4,10,20,0.6);
+      position: relative;
+    
+    }
+
+    .result-div{
+      display: grid;
+      grid-template-columns: 120px 1fr 140px;
+      gap:10px;
+      align-items:center;
+      min-height:68px;
+      padding:8px;
+
+      border-radius:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border: 1px solid rgba(255,255,255,0.02);
+      overflow:hidden;
+    
+      padding-bottom: 40px;
+    }
+
+    .result-lable{
+      background: linear-gradient(180deg,var(--accent-2), #0fa39a);
+      color: #022a27;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:8px;
+      padding:8px 10px;
+      height:44px;
+      box-shadow: 0 6px 18px rgba(2,20,18,0.25);
+    }
+
+    .result{
+      background: rgba(255,255,255,0.02);
+      color: #cfeee6;
+      padding:10px;
+      border-radius:8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
+      font-size:14px;
+      line-height:1.35;
+      overflow:auto;
+      word-break:break-all;
+      max-height:90px;
+    }
+
+    #open-with{
+      display:grid;
+      gap:8px;
+      align-content:center;
+      justify-items:center;
+    }
+
+    .open-with-button{
+      width:110px;
+      height:36px;
+      display:inline-grid;
+      place-items:center;
+      border-radius: 8px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:600;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      box-shadow: 0 6px 18px rgba(2,20,18,0.25);
+      border: 1px solid rgba(255,255,255,0.02);
+    }
+
+    #open-google{
+      background: linear-gradient(180deg,var(--accent), #00b288);
+      color: #012d27;
+    }
+    #open-bing{
+      background: linear-gradient(180deg, #1f6fd6, #1b56b8);
+      color: #eaf4ff;
+    }
+
+    .open-with-button:hover{ transform: translateY(-3px); box-shadow: 0 8px 26px rgba(0,0,0,0.45);} 
+
+    #clear-button{
+        position:absolute;
+
+        right: 15px;
+        bottom: 15px;
+
+        background:transparent;
+        border-radius:8px;
+        padding:8px 12px;
+        
+        border: 1px solid rgba(255,255,255,0.04);
+        
+        color: var(--muted);
+        
+        cursor:pointer;
+        font-weight:600;
+
+        backdrop-filter: blur(4px);
+    }
+    #clear-button:hover{ color:var(--danger); transform: translateY(-2px); }
+
+    /* operations */
+    #operation{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      padding:12px;
+      border-radius:12px;
+      border: 1px solid rgba(255,255,255,0.02);
+      box-shadow: 0 8px 24px rgba(4,10,20,0.5);
+    }
+
+    #input-operations{
+      padding-bottom:10px;
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+      gap:12px;
+    }
+
+    .input-filed{
+      width:100%;
+      height:36px;
+      padding:6px 10px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.02);
+      color: #dffbf0;
+      outline:none;
+      transition: box-shadow .12s ease, border-color .12s ease;
+    }
+    .input-filed:focus{ box-shadow: 0 8px 30px rgba(0,212,170,0.06); border-color: rgba(0,212,170,0.18); }
+
+    label{ color:var(--muted); font-size:13px; display:block; margin-bottom:6px; }
+
+
+    #has-operations{ 
+      display: grid;
+      grid-template-columns: repeat(3,auto);
+
+      gap:5px; 
+      padding-top: 10px;
+      padding-bottom:10px;
+
+      border-bottom:1px 
+      dashed rgba(255,255,255,0.02); 
+    
+    }
+    #has-operations label{padding-top: 4px; color:var(--muted); font-weight:600 }
+    #has-operations input[type="checkbox"]{ width:18px; height:18px; accent-color: var(--accent); }
+
+    .has-operate {
+      display: grid;
+      grid-template-columns: minmax(120px, 130px) 10px;
+      align-items: center;
+      gap: 8px;
+    }
+    #history-div{
+      position: relative; /* important */
+
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      padding:12px;
+      border-radius:12px;
+      border: 1px solid rgba(255,255,255,0.02);
+      box-shadow: 0 8px 24px rgba(4,10,20,0.5);
+    }
+  #clear-history{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    background:transparent;
+    border-radius:8px;
+    padding:8px 12px;
+    
+    border: 1px solid rgba(255,255,255,0.04);
+    
+    color: var(--muted);
+    
+    cursor:pointer;
+    font-weight:600;
+    
+    backdrop-filter: blur(4px);
+  }
+  #clear-history:hover{ color:var(--danger); transform: translateY(-2px); }
+
+  #historys{
+      display: grid;
+      grid-template-columns: repeat(2 , 1fr);
+      gap: 8px;
+    }
+  #history-item{
+    width: 1fr;
+    height:50px;
+
+    background: rgba(255,255,255,0.02);
+    color: #cfeee6;
+    padding:10px;
+    border-radius:8px;
+
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
+    font-size:12px;
+    line-height:1.35;
+    overflow:auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+  #history-item:hover{
+    transform: translateY(-3px); box-shadow: 0 8px 26px rgba(0,0,0,0.45);    
+  }
+    
+  @media (max-width:575px){
+    #has-operations{ 
+      display: grid;
+      grid-template-columns: repeat(2,auto);
+
+      gap:5px; 
+      padding-bottom:12px; 
+      border-bottom:1px 
+      dashed rgba(255,255,255,0.02); 
+    
+    }
+    #historys{
+      display: grid;
+      grid-template-columns: repeat(1 , 1fr);
+      gap: 8px;
+    }
+  }
+
+  @media (max-width:520px){
+    .result-div{ grid-template-columns: 86px 1fr 120px; }
+    .open-with-button{ width:92px; height:34px; }
+    #clear-button{ right:8px; bottom:8px; }
+  }
+  
+
+  </style>
+</head>
+<body>
+    <div class="container">
+    
+    
+        <h1 id="app-title">DorkGen</h1>
+
+        <div id="show-result">
+            <div class="result-div" id="dork-result">
+                <div class="result-lable">Dork</div>
+                <div class="result" id="dork-output"></div>
+                <div id="open-with">
+                <div id="open-google" class="open-with-button" onclick="OpenGoogle()">Google</div>
+                <div id="open-bing" class="open-with-button" onclick="OpenBing()">Bing</div>
+            </div>
+        </div>
+        
+        <button id="clear-button" onclick="clearDOM()" type="reset">clear</button>
+    </div>  
+
+    <div id="operation">
+      
+      <div id="input-operations">
+        <div>
+          <label for="site">site:</label>
+          <input class="input-filed" type="text" name="site" id="site" oninput="siteChange();updateDOM()" placeholder="site.com">
+        </div>
+
+        <div>
+          <label for="title">In Title:</label>
+          <input class="input-filed" type="text" name="title" id="title" oninput="titleChange();updateDOM()" placeholder="welcome to nginx">
+        </div>
+        
+        <div>
+          <label for="ext">File Extension:</label>
+          <input class="input-filed" type="text" name="ext" id="ext" oninput="extensionChange();updateDOM()" placeholder="php html aspx txt conf">
+        </div>
+
+        <div>
+          <label for="inurl">In URL:</label>
+          <input class="input-filed" type="text" name="inurl" id="inurl" oninput="inurlChange();updateDOM()" placeholder="admin login register">
+        </div>
+        
+        <div>
+          <label for="intext">In Text:</label>
+          <input class="input-filed" type="text" name="intext" id="intext" oninput="inTextChange();updateDOM()" placeholder="password admin panel">
+        </div>
+
+
+        <div>
+          <label for="r_keyword">removing keyword:</label>
+          <input class="input-filed" type="text" name="r_keyword" id="r_keyword" oninput="removeKeywordChange();updateDOM()" placeholder="www profiles">
+        </div>
+
+
+
+      </div>
+
+      <hr>
+
+      <div id="has-operations">
+        <div class="has-operate">
+          <label for="has_param">have parameter</label>
+          <input type="checkbox" name="has_param" id="has_param" onchange="hasParamChange();updateDOM()">
+        </div>
+      </div>
+
+    </div>
+    
+    <div id="history-div">
+      <h3 style="margin: 0px;margin-bottom: 13px;color: #cfeee6;font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;">History:</h3>
+      <button id="clear-history" onclick="clearDorkHistory()">clear history</button>
+      <div id="historys">
+      </div>
+    </div>
+  
+
+<script>
+  values = {
+    "site": "",
+    "title": "",
+    "intext": [],
+    "ext": [],
+    "inurl": [],
+    "r_keyword": []
+  }
+  
+  has_values = {
+    "has_param": 0,
+  }
+
+  has_ext = {}
+  
+  const formats = {
+    "databases": [
+      "sql", "db", "sqlite", "sqlite3", "mdb", "accdb", "bak"
+    ],
+    
+    "config": [
+      "conf", "cfg", "cnf", "ini", "env", "properties", "toml", "yml", "yaml", "json", "circleci"
+    ],
+    
+    "data_files": [
+      "csv", "tsv", "xls", "xlsx", "ods", "json", "ldjson", "ndjson"
+    ],
+    
+    "xml_json": [
+      "xml", "xsl", "xslt", "json", "rss", "atom"
+    ],
+
+    "logs": [
+        "log", "err", "out", "trace"
+    ],
+
+    "secrets_keys_certs": [
+      "key", "pem", "crt", "cer", "pfx", "p12", "der", "csr"
+    ],
+
+    "backups": [
+      "bak", "old", "orig", "backup", "save", "swp", "zip"
+    ],
+
+    "archives": [
+      "zip", "tar", "gz", "tgz", "tar.gz", "rar", "7z", "bz2", "xz"
+    ],
+
+    "documents": [
+      "pdf", "doc", "docx", "ppt", "pptx", "xls", "xlsx", "odt", "rtf", "txt", "md"
+    ],
+
+    "repo": [
+      "gitignore", "gitattributes", "lock", "git"
+    ],
+    
+    "source-code": {
+      "html": [
+        "html", "htm", "shtml", "xhtml", "xht"
+      ],
+      
+      "js": [
+        "js", "mjs", "cjs", "min.js", "map" 
+      ],
+
+      "php": [
+        "php", "phtml", "php3", "php4", "php5", "php7", "phps", "phar", "inc"
+      ],
+      
+      "asp": [
+        "asp", "aspx", "ashx", "asmx", "ascx", "asax", "vbhtml"
+      ],
+
+      "jsp": [
+        "jsp", "jspx", "jhtml"
+      ],
+      
+      "coldfusion": [
+        "cfm", "cfc"
+      ],
+
+      "perl_python_ruby": [
+        "pl", "cgi", "py", "wsgi", "rb", "rhtml"
+      ],
+      
+      "other source": [
+        "sh", "bash", "zsh", "ps1", "bat", "cmd", "dockerfile", "makefile", "gradle","java", "class", "jar", "ear", "go", "py", "rb", "cs", "cpp", "c", "h", "ts"
+      ],
+
+    }
+  }
+
+  operationDiv = document.getElementById("has-operations")
+  let x = ""
+
+  for ( let record of Object.entries(formats)){
+    let key = record[0] 
+    let values = record[1] 
+
+    if ( key != "source-code" ){
+      operationDiv.innerHTML += `
+      <div class="has-operate" >
+        <label for="has_${key}" >have ${key}</label>
+        <input type="checkbox" name="${key}" id="has_${key}" onchange="addExention(this);updateDOM()" >
+      </div>
+      `
+    }else{
+        for (let record of Object.entries(formats["source-code"])){
+          let key = record[0] 
+          let values = record[1] 
+
+          operationDiv.innerHTML += `
+          <div class="has-operate" >
+            <label for="has_${key}" >have ${key}</label>
+            <input type="checkbox" name="source-code,${key}" id="has_${key}" onchange="addExention(this);updateDOM()" >
+          </div>
+          `
+        }
+
+      }
+
+    }
+
+
+  historys = window.localStorage.getItem("history")
+  if (historys) {
+    historys = JSON.parse(historys)
+    renderDorkHistory()
+  }else {
+    window.localStorage.setItem("history", JSON.stringify([]))
+    historys = []
+  }
+
+  function updateDOM(){
+      let div2update = document.getElementsByClassName("result")[0]
+      dorkString = ""
+
+      // has param operation
+      if (Number(has_values["has_param"]) === 1) {
+          if (!values["inurl"].includes("&")) {
+              values["inurl"].push("&")
+          }
+      }else {
+          values["inurl"] = values["inurl"].filter(i => i !== "&")
+      }
+      
+
+      for ( let record of Object.entries(has_ext)){
+        file_format = record[0]
+        has = record[1]
+        
+        if (file_format.split(",")[0] != "source-code"){
+          if (has === 1){
+            for (ext of formats[file_format]){
+              if (!values["ext"].includes(ext)){
+                values["ext"].push(ext)
+              }
+            }
+          }else{
+            values["ext"] = values["ext"].filter(
+              i => !formats[file_format].includes(i)
+            );
+
+          }
+        }else{
+          sourceFormat = file_format.split(",")[1]
+          if (has === 1){
+            for (ext of formats["source-code"][sourceFormat]){
+              if (!values["ext"].includes(ext)){
+                values["ext"].push(ext)
+              }
+            }
+          }else{
+            values["ext"] = values["ext"].filter(
+              i => !formats["source-code"][sourceFormat].includes(i)
+            );
+          }
+
+        }
+      
+      }
+
+      // inputs
+      for ( let record of Object.entries(values)){ 
+          let key = record[0]
+          let value = record[1]
+
+          if (value){
+              if (Array.isArray(value) && value.length != 0){  // type ==> Array
+                  if (key == "r_keyword"){
+                      for(keyword of value){
+                          if (keyword){
+                              dorkString += `-${keyword} `
+                          }
+                      }
+
+                  }else{
+                      if (value.length == 1){
+                          dorkString += `${key}:${value} `
+                      }else{
+
+                          datas = ""
+                          for ( data of value){
+                              if (data){
+                                  datas += ` ${key}:${data} OR`
+                              }
+                          }  
+                          datas = datas.slice(0,-2) // removing the last "OR" 
+                          dorkString += `(${datas}) `
+                      }
+                  }
+
+              }else if (value && ! Array.isArray(value)) { // type ==> string
+                  if (key == "site"){
+                      dorkString += `${key}:${value} `
+                  }else if (key == "title"){
+                      dorkString += `${key}:"${value}" `
+                  }
+              }
+
+          }
+      }
+
+      div2update.textContent = dorkString
+  }
+
+  function addExention(event){
+    event.checked ? has_ext[event.name] = 1 : has_ext[event.name] = 0
+  }
+
+  function clearDOM(){
+      for (record of Object.entries(values)){
+          document.getElementById(record[0]).value = ""
+      }
+      document.getElementsByClassName("result")[0].textContent = ""
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+      });      
+      
+      values = {
+          "site": "",
+          "title": "",
+          "intext": [],
+          "ext": [],
+          "inurl": [],
+          "r_keyword": []
+      }
+      has_values = {
+        "has_param": 0,
+      }
+      has_ext = {}
+      
+      dorkString = ""
+  }
+
+  function renderDorkHistory(){
+    historysDIV = document.getElementById("historys")
+    historysDIV.innerHTML = ""
+
+    historys = JSON.parse(window.localStorage.getItem("history"))
+    historys.reverse()
+    for (let historydork of historys){
+      historysDIV.innerHTML += `
+        <div id='history-item' onclick=setDorkFromHistory(this)>${historydork}</div>
+      `
+    }
+    
+  }
+
+  function setDorkFromHistory(event) {
+    const dork = event.textContent
+    dorkString = dork
+    document.getElementById("dork-output").textContent = dork
+  }
+
+  function saveDorkToHistory(dork) {
+    if (!historys.includes(dork)) {
+      historys.push(dork)
+      localStorage.setItem("history", JSON.stringify(historys))
+      renderDorkHistory()
+    }
+  }
+
+  function clearDorkHistory(){
+    window.localStorage.setItem("history", JSON.stringify([]))
+    historys = []
+    renderDorkHistory()
+
+  }
+
+  function OpenGoogle(){
+    saveDorkToHistory(dorkString)
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(dorkString)}`)
+  }
+
+  function OpenBing(){
+    saveDorkToHistory(dorkString)
+    window.open(`https://www.bing.com/search?q=${encodeURIComponent(dorkString)}`)
+  }
+
+  function siteChange(){
+      site_value = document.getElementById("site").value
+      site_value ? values["site"] = site_value : values["site"] = ""
+  }
+  
+  function titleChange(){
+      title_value = document.getElementById("title").value
+
+      title_value ? values["title"] = title_value : values["title"] = ""
+  }
+
+  function hasParamChange(){
+      has_param = document.getElementById("has_param").checked
+      has_param ? has_values['has_param'] = 1 : has_values['has_param'] = 0 ;
+  }
+
+  function inTextChange(){
+      in_text = document.getElementById("intext").value
+      in_text_splited = in_text.split(" ")
+
+
+      in_text_splited && !(in_text_splited.length == 1 && in_text_splited[0] == "") ? values["intext"] = in_text_splited : values["intext"] = []
+  }
+  
+  function inurlChange(){
+      in_url = document.getElementById("inurl").value
+      in_url_splited = in_url.split(" ")
+
+      in_url_splited && !(in_url_splited.length == 1 && in_url_splited[0] == "") ? values["inurl"] = in_url_splited : values["inurl"] = []
+
+  }
+
+  function extensionChange(){
+      ext = document.getElementById("ext").value
+      ext_splited = ext.split(" ")
+
+      ext_splited && !(ext_splited.length == 1 && ext_splited[0] == "") ? values["ext"] = ext_splited : values["ext"] = []
+  }
+  function removeKeywordChange(){
+      r_keyword = document.getElementById("r_keyword").value
+      r_keyword_splited = r_keyword.split(" ")
+
+      r_keyword_splited && !(r_keyword_splited.length == 1 && r_keyword_splited[0] == "") ? values["r_keyword"] = r_keyword_splited : values["r_keyword"] = []
+  }
+  
+</script>
+</body>
+</html>
