@@ -1,7 +1,7 @@
 # DorkGen
 
 <div align="center">
-  <img src="src/logo" alt="LinkHound Logo" width="150" height="200"/>
+  <img src="src/logo.png" alt="LinkHound Logo" width="150" height="200"/>
   <p>dorkgen: A lightweight frontend tool for generating powerful Google/Bing dorks for reconnaissance and OSINT.</p>
 </div>
 
@@ -9,8 +9,6 @@
 ---
 
 DorkGen is a lightweight, frontend-only **dork generator** for security recon and Google/Bing-based searching. It helps you quickly compose dynamic dorks (site:, intitle:, inurl:, intext:, filetype:, OR logic, etc.), experiment with parameter patterns, and save your history locally in the browser.
-
-> NOTE: This repository is available on GitHub (files include `index.html`, `dorkgen.py`, and `install.sh`). ([github.com](https://github.com/NakuTenshi/dorkgen))
 
 ---
 
