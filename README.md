@@ -1,7 +1,7 @@
 # DorkGen
 
 <div align="center">
-  <img src="src/logo.png" alt="LinkHound Logo" width="150" height="200"/>
+  <img src="src/logo.png" alt="LinkHound Logo" width="350" height="500"/>
   <p>dorkgen: A lightweight frontend tool for generating powerful Google/Bing dorks for reconnaissance and OSINT.</p>
 </div>
 
