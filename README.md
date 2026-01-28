@@ -10,7 +10,6 @@
 
 DorkGen is a lightweight, frontend-only **dork generator** for security recon and Google/Bing-based searching. It helps you quickly compose dynamic dorks (site:, intitle:, inurl:, intext:, filetype:, OR logic, etc.), experiment with parameter patterns, and save your history locally in the browser.
 
----
 
 ## Features
 
